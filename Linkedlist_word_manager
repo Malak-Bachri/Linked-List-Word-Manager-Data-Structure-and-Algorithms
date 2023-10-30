@@ -1,7 +1,7 @@
 class Node:
     def __init__(self, word):
         self.word = word
-        self.next = None  # Pointer to the next node
+        self.next = None  
 
 class LinkedList:
     def __init__(self):
