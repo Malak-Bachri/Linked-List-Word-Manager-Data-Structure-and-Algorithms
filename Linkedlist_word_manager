@@ -1,0 +1,208 @@
+class Node:
+    def __init__(self, word):
+        self.word = word
+        self.next = None  # Pointer to the next node
+
+class LinkedList:
+    def __init__(self):
+        self.head = None
+        self.size = 0
+
+    def size(self):
+        return self.size
+
+    def addword(self, data):
+        choice = int(input("Type 1 if you want to add the word at the beginning of the list\n"
+                           "Type 2 if you want to add the word in a specific position in the list\n"
+                           "Type 3 if you want to add the word at the end of the list: "))
+
+        if choice == 1:             #beginning of list
+            newNode = Node(data)
+            newNode.next = self.head
+            self.head = newNode
+            self.size += 1
+
+        elif choice == 2:           #position in list
+            position = int(input("Enter the position to add the word: "))
+            if position < 1 or position > self.size + 1:
+                print("The position you entered is not correct.")
+            else:
+                newNode = Node(data)
+                if position == 1:
+                    newNode.next = self.head
+                    self.head = newNode
+                else:
+                    current_node = self.head
+                    for _ in range(position - 2):
+                        current_node = current_node.next
+                    newNode.next = current_node.next
+                    current_node.next = newNode
+                self.size += 1
+
+        elif choice == 3:           #end of list
+            newNode = Node(data)
+            if self.head is None:
+                self.head = newNode
+            else:
+                current_node = self.head
+                while current_node.next is not None:
+                    current_node = current_node.next
+                current_node.next = newNode
+            self.size += 1
+
+        else:
+            print("You have to pick either 1,2 or 3.")
+
+    def removeword(self):
+        choice = int(input("Type 1 if you want to remove the word at the beginning of the list\n"
+                           "Type 2 if you want to remove a specific position in the list\n"
+                           "Type 3 if you want to remove the word at the end of the list: "))
+        if choice == 1:     #beginning of list
+            if self.head is None:
+                return
+
+            data = self.head.word
+            current_node = self.head
+
+            if self.head.word == data:
+                self.head = self.head.next
+                self.size -= 1
+                return
+
+            while current_node.next is not None:
+                if current_node.next.word == data:
+                    current_node.next = current_node.next.next
+                    self.size -= 1
+                    return
+
+                current_node = current_node.next
+
+            print(f"The word '{data}' was not found in the list.")
+
+        elif choice == 2:       #position in the list
+            position = int(input("Enter the position of the word you want to remove: "))
+            if position < 1 or position > self.size:
+                print("The position you entered is not correct.")
+                return
+
+            current_node = self.head
+
+            if position == 1:
+                data = current_node.word
+                current_node = current_node.next
+                self.head = current_node
+                self.size -= 1
+                return
+
+            for _ in range(position - 2):
+                current_node = current_node.next
+
+            if current_node is not None:
+                data = current_node.next.word
+                current_node.next = current_node.next.next
+                self.size -= 1
+            else:
+                print("The word you want to remove is not in the list.")
+
+        elif choice == 3:       #end of the list
+            if self.head is None:
+                print("The list is empty. Nothing to remove.")
+                return
+
+            current_node = self.head
+            previous_node = None
+
+            while current_node.next is not None:
+                previous_node = current_node
+                current_node = current_node.next
+
+            data = current_node.word
+
+            if previous_node is not None:
+                previous_node.next = None
+            else:
+                self.head = None
+
+            self.size -= 1
+
+    def traversalFrequency(self):
+        word_counts = {}
+        currentNode = self.head
+        while currentNode is not None:
+            word = currentNode.word
+            if word in word_counts:
+                word_counts[word] += 1
+            else:
+                word_counts[word] = 1
+            currentNode = currentNode.next
+        for word, count in word_counts.items():
+            print(f"{word}: {count}")
+
+    def wordsearch(self, targetword):
+        count = 0
+        currentNode = self.head
+        while currentNode is not None:
+            if currentNode.word == targetword:
+                count += 1
+            currentNode = currentNode.next
+        return count
+
+
+linked_list = LinkedList()
+def case1():
+    targetword = input("Enter a word: ")
+    count = linked_list.wordsearch(targetword)
+    if count == 0:
+        print(f"The word '{targetword}' was not found.")
+    else:
+        print(f"The word '{targetword}' appears {count} times in the Linked list.")
+        print(f"TARGET: '{targetword}' \nFREQUENCY: {count}")
+
+def case2():  # addword
+    addedword = input("Enter the word you would like to add to your list: ")
+    linked_list.addword(addedword)  # doesn't work yet
+    print(f"The word '{addedword}' was added to the list.")
+
+def case3():  # removeword
+    linked_list.removeword()
+
+def case4():  # traversal and frequency
+    print("here are all the elements of the list")
+    linked_list.traversalFrequency()
+
+def case5():  # size
+    size=linked_list.size
+    print(f"you have {size} item(s) in your list")
+
+def case6():  # exit
+    print("Exiting the program.")
+    exit(linked_list)
+
+switch = {1: case1, 2: case2, 3: case3, 4: case4, 5: case5, -1: case6}
+
+def main():
+    while True:
+        command = int(input("MENU:  \n"
+                            "Press 1 for a word search\n"
+                            "Press 2 to add a word to your list\n"
+                            "Press 3 to remove a word from your list\n"
+                            "Press 4 to traverse the list and show the frequency of each word\n"
+                            "Press 5 to reveal the number of words in total\n"
+                            "Press -1 to exit this program\n"
+                            "What action would you like to perform?: "
+                            ""))
+
+        if command == -1:
+            print("Exiting the program")
+            break
+
+        if command in switch:
+            switch[command]()
+        else:
+            print("You should enter either 1, 2, 3, or 4.")
+            print("\n")
+
+if __name__ == "__main__":
+    main()
+
+
