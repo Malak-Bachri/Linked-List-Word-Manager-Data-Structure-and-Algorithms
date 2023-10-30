@@ -199,7 +199,7 @@ def main():
         if command in switch:
             switch[command]()
         else:
-            print("You should enter either 1, 2, 3, or 4.")
+            print("You should enter either 1, 2, 3, 4 or 5. Press -1 if you want to exit")
             print("\n")
 
 if __name__ == "__main__":
